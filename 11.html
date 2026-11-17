@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IRS Valuation｜利率交換估值</title>
+  <style>
+    :root{--ink:#14263d;--muted:#607188;--line:#dce5ef;--paper:#f3f7fb;--white:#fff;--navy:#173352;--blue:#2765a5;--teal:#087e75;--green:#0a766b;--soft:#e8f4f2;--amber:#8a5c12;--shadow:0 14px 38px rgba(30,55,82,.08)}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif}
+    .masthead{background:linear-gradient(118deg,#142b45 0%,#20496c 72%,#197b78 100%);color:#fff;padding:28px max(24px,calc((100vw - 1200px)/2)) 34px}
+    .topline{display:flex;justify-content:space-between;align-items:center;gap:24px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:#b9d3e7;font-weight:700}.brand{font-size:13px;color:#d3e2ef}.title{font-size:clamp(28px,4vw,40px);letter-spacing:-.035em;line-height:1.15;margin:15px 0 7px}.subtitle{margin:0;color:#d5e2ed;font-size:15px}.identity{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}.identity label{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:7px 10px;border-radius:9px;color:#dceaf4;font-size:12px}.identity input{border:0;border-bottom:1px solid rgba(255,255,255,.45);outline:none;background:transparent;color:#fff;width:104px;font:600 13px inherit}.identity input::placeholder{color:#bfd0df}
+    main{max-width:1200px;margin:24px auto 54px;padding:0 24px}.summary{display:grid;grid-template-columns:1.1fr 2fr;gap:16px;margin-top:-1px}.value-card,.quick-card,.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.value-card{padding:22px 24px;background:linear-gradient(145deg,#fff 20%,#eff8f6 100%)}.small-label{font-size:12px;color:var(--muted);font-weight:650;letter-spacing:.03em}.value-number{font-size:clamp(32px,4vw,44px);font-weight:750;letter-spacing:-.04em;color:var(--navy);margin:3px 0}.value-caption{font-size:12px;color:var(--muted)}.quick-card{padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:center}.metric{padding:4px 12px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric strong{display:block;font-size:19px;color:var(--navy);font-variant-numeric:tabular-nums}.metric span{font-size:11px;color:var(--muted)}
+    .layout{display:grid;grid-template-columns:minmax(310px,.82fr) minmax(0,1.6fr);gap:18px;margin-top:18px;align-items:start}.panel{padding:22px}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:17px}.panel h2{margin:0;font-size:18px;letter-spacing:-.02em}.panel-intro{margin:4px 0 0;color:var(--muted);font-size:12px}.tag{display:inline-flex;align-items:center;gap:6px;border-radius:99px;background:#eef4f9;color:#365674;padding:5px 9px;font-size:11px;font-weight:700;white-space:nowrap}.tag:before{content:"";width:6px;height:6px;background:#4a84b7;border-radius:50%}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field label{display:block;font-size:12px;color:#4a6078;font-weight:650;margin-bottom:5px}.field input{width:100%;height:40px;border:1px solid #cfdae7;border-radius:8px;padding:0 11px;color:var(--ink);background:#fff;font:inherit;font-variant-numeric:tabular-nums;outline:none}.field input:focus,.curve-input:focus{border-color:#5b91bd;box-shadow:0 0 0 3px rgba(48,110,161,.12)}.suffix{font-size:11px;color:#79899a;margin-top:3px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.button{border:0;border-radius:8px;padding:10px 14px;font:650 13px inherit;cursor:pointer;transition:.15s}.button:hover{transform:translateY(-1px);filter:brightness(1.04)}.primary{background:var(--navy);color:#fff}.secondary{background:#e9f0f7;color:#234562}.fetch{background:#e3f2ef;color:#096c63}.button:disabled{opacity:.55;cursor:wait;transform:none}.status{min-height:38px;margin-top:12px;padding:9px 11px;border-radius:8px;background:#f4f7fa;color:#5b6c80;font-size:11px}.status.success{background:#edf7f3;color:#216b4f}.status.error{background:#fff2ee;color:#9a4735}.status.info{background:#eff5fa;color:#476781}.source-link{color:#226da1;text-decoration:none}.source-link:hover{text-decoration:underline}
+    .curve-wrap{margin-top:19px}.subhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.subhead h3{margin:0;font-size:13px}.subhead span{font-size:10px;color:#718399}.curve-table,.result-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}.curve-table th,.curve-table td{padding:8px 7px;border-bottom:1px solid #e8edf3;text-align:right;font-size:11px}.curve-table th{font-size:10px;color:#61758a;background:#f5f8fb;font-weight:700}.curve-table th:first-child,.curve-table td:first-child{text-align:left;width:28px}.curve-table td:nth-child(2){text-align:left;color:#324d68}.curve-input{width:86px;text-align:right;border:1px solid #d6e0ea;border-radius:6px;height:31px;padding:0 8px;font:12px inherit;color:var(--ink);outline:none}.curve-help{font-size:10px;color:#708298;margin:9px 0 0;line-height:1.5}.rate-ext{font-size:10px;color:var(--teal);font-weight:650}
+    .result-panel{padding:21px 0 4px;overflow:hidden}.result-panel .panel-head{padding:0 22px}.table-scroller{overflow-x:auto;padding:0 16px 12px}.result-table{min-width:1080px}.result-table th{padding:10px 9px;background:#f3f7fa;color:#5d7185;font-size:10px;text-align:right;border-block:1px solid var(--line);white-space:nowrap}.result-table td{padding:11px 9px;text-align:right;border-bottom:1px solid #e8edf2;font-size:11px;white-space:nowrap}.result-table th:first-child,.result-table td:first-child{text-align:left}.result-table tbody tr:last-child td{border-bottom:0}.result-table tfoot td{font-weight:750;color:var(--navy);background:#f1f6f9;border-top:1px solid var(--line)}.num{font-variant-numeric:tabular-nums}.result-flag{display:inline-block;background:#e9f4f1;color:#177368;border-radius:99px;padding:3px 7px;font-size:9px;font-weight:700;margin-left:5px}.legend{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:10px 22px 14px;color:#728298;font-size:10px}.method{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-top:18px}.method .panel{box-shadow:none}.formula-list{display:grid;grid-template-columns:1fr 1fr;gap:9px 20px;margin-top:12px}.formula{font-size:11px;color:#52677f}.formula b{color:#2b4865}.note-list{margin:10px 0 0;padding-left:17px;color:#65778c;font-size:11px}.note-list li{margin:5px 0}.foot{display:flex;justify-content:space-between;gap:15px;max-width:1200px;margin:0 auto;padding:0 24px 28px;color:#8b9aab;font-size:10px}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    @media(max-width:850px){.summary{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.method{grid-template-columns:1fr}.quick-card{min-height:98px}.result-panel{margin-top:0}}
+    @media(max-width:540px){.masthead{padding:22px 18px 28px}.topline{align-items:flex-start}.brand{display:none}main{padding:0 14px;margin-top:16px}.panel{padding:17px}.form-grid{gap:10px}.quick-card{padding:14px 8px}.metric{padding:4px 8px}.metric strong{font-size:16px}.identity input{width:90px}.formula-list{grid-template-columns:1fr}.foot{padding-inline:15px;display:block}.foot span{display:block;margin:3px 0}}
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="topline"><div class="eyebrow">Fixed income · Chapter 7</div><div class="brand">FINANCIAL MODELING / IRS</div></div>
+    <h1 class="title">利率交換估值</h1>
+    <p class="subtitle">依付款時點推算遠期利率，折現淨現金流以估計 IRS 價值</p>
+    <div class="identity" aria-label="學生資料">
+      <label>姓名 <input id="studentName" value="王筠" autocomplete="name" aria-label="姓名"></label>
+      <label>學號 <input id="studentId" value="r15724026" aria-label="學號"></label>
+    </div>
+  </header>
+
+  <main>
+    <section class="summary" aria-label="估值摘要">
+      <div class="value-card"><div class="small-label">IRS VALUE · 浮動端減固定端</div><div class="value-number" id="valueSummary">—</div><div class="value-caption">依目前輸入條件計算，金額單位同名目本金</div></div>
+      <div class="quick-card">
+        <div class="metric"><strong id="metricPeriods">—</strong><span>付款期數</span></div>
+        <div class="metric"><strong id="metricLastTime">—</strong><span>最後付款時間（年）</span></div>
+        <div class="metric"><strong id="metricSource">手動輸入</strong><span>利率來源</span></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-head"><div><h2>交易條件</h2><p class="panel-intro">修改條件或利率曲線後重新計算。</p></div><span class="tag">手動輸入模式</span></div>
+        <div class="form-grid">
+          <div class="field"><label for="fixedRate">IRS 固定利率</label><input id="fixedRate" type="number" min="-100" max="100" step="0.001" value="3.000"><div class="suffix">年利率（%）</div></div>
+          <div class="field"><label for="life">剩餘年期</label><input id="life" type="number" min="0.001" max="100" step="0.1" value="1.2"><div class="suffix">年；每半年付款一次</div></div>
+          <div class="field"><label for="principal">名目本金</label><input id="principal" type="number" min="0.000001" step="1" value="100"><div class="suffix">金額單位依使用者設定</div></div>
+          <div class="field"><label for="sofr">第一期 SOFR</label><input id="sofr" type="number" min="-100" max="100" step="0.001" value="2.500"><div class="suffix">年利率（%）</div></div>
+        </div>
+        <div class="actions">
+          <button class="button primary" id="calculateBtn" type="button">計算 IRS 價值</button>
+          <button class="button secondary" id="scheduleBtn" type="button">更新付款日期</button>
+          <button class="button fetch" id="fetchBtn" type="button">讀取 NYFed 最新 SOFR</button>
+        </div>
+        <div class="status info" id="fetchStatus" role="status">外部讀取來源：紐約聯邦準備銀行 Markets Data API（SOFR）。讀取 SOFR 不會覆蓋下方手動零息利率曲線。</div>
+
+        <div class="curve-wrap">
+          <div class="subhead"><h3>零息利率曲線</h3><span>連續複利（c.c.）／年率 %</span></div>
+          <table class="curve-table" aria-label="手動輸入零息利率曲線">
+            <thead><tr><th>#</th><th>付款時間（年）</th><th>零息利率 c.c.（%）</th><th>資料狀態</th></tr></thead>
+            <tbody id="curveBody"></tbody>
+          </table>
+          <p class="curve-help">依範例的付款時間填入每期零息利率。公開 SOFR 資料只提供第一期 SOFR；各期限的零息利率仍需依課本或指定來源輸入。</p>
+        </div>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-head"><div><h2>現金流與折現明細</h2><p class="panel-intro">每期依浮動現金流減固定現金流，再以該期零息利率折現。</p></div><span class="tag">名目本金現金流</span></div>
+        <div class="table-scroller">
+          <table class="result-table" aria-label="IRS 估值明細">
+            <thead><tr><th>期數</th><th>時間（年）</th><th>零息利率<br>c.c.</th><th>固定現金流</th><th>遠期利率<br>c.c.</th><th>遠期利率<br>s.c.</th><th>浮動現金流</th><th>淨現金流</th><th>折現因子</th><th>現值</th></tr></thead>
+            <tbody id="resultBody"></tbody>
+            <tfoot><tr><td colspan="9">IRS Value · 現值合計</td><td id="totalValue">—</td></tr></tfoot>
+          </table>
+        </div>
+        <div class="legend"><span>固定現金流 = N × 固定利率 ÷ 2</span><span>折現因子 = exp(−零息利率 × 付款時間)</span><span>正值表示浮動端現值高於固定端</span></div>
+      </div>
+    </section>
+
+    <section class="method">
+      <div class="panel"><div class="panel-head"><div><h2>計算流程</h2><p class="panel-intro">依教材範例以連續複利零息利率推導遠期利率。</p></div></div>
+        <div class="formula-list">
+          <div class="formula"><b>① 付款時間</b>　由年期向前排定半年付款日，保留短期首期。</div>
+          <div class="formula"><b>② 遠期利率 c.c.</b>　首期採 SOFR；後續由相鄰零息利率推算。</div>
+          <div class="formula"><b>③ 遠期利率 s.c.</b>　2 × [exp(遠期 c.c. ÷ 2) − 1]</div>
+          <div class="formula"><b>④ IRS Value</b>　Σ[(浮動現金流 − 固定現金流) × 折現因子]</div>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-head"><div><h2>資料與假設</h2><p class="panel-intro">本頁重現範例的半年期現金流慣例。</p></div></div>
+        <ul class="note-list"><li>SOFR 是第一期的浮動參考利率；API 讀取最近可用的發布資料。</li><li>零息曲線欄位使用連續複利年率，請勿直接以不同定義的公債殖利率替代。</li><li>本範例固定與浮動現金流皆除以 2，便於與教材工作表比對。</li><li>來源：紐約聯邦準備銀行 Markets Data API；資料使用受其條款及參考利率聲明限制。</li></ul>
+      </div>
+    </section>
+  </main>
+  <footer class="foot"><span>IRS Valuation · Chapter 7</span><span>利率以 % 輸入；估值金額與本金使用相同單位</span><span id="calcTimestamp">—</span></footer>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const NYFED_API = "https://markets.newyorkfed.org/api/rates/secured/sofr/search.json";
+    let rateSource = "手動輸入";
+    let latestRows = [];
+
+    function safeSave() {
+      try {
+        localStorage.setItem("irs-student-name", $("studentName").value);
+        localStorage.setItem("irs-student-id", $("studentId").value);
+      } catch (_) {}
+    }
+    function fmt(value, digits=6) {
+      if (!Number.isFinite(value)) return "—";
+      return value.toLocaleString("en-US", {minimumFractionDigits:digits, maximumFractionDigits:digits});
+    }
+    function readNumber(input, label) {
+      const raw=input.value.trim();
+      if(raw==="") throw new Error(`${label}不可留白。`);
+      const value=Number(raw);
+      if(!Number.isFinite(value)) throw new Error(`${label}必須是有效數字。`);
+      return value;
+    }
+    function setStatus(message, kind="info", html=false) {
+      const box = $("fetchStatus");
+      box.className = `status ${kind}`;
+      if (html) box.innerHTML = message; else box.textContent = message;
+    }
+    function generatedTimes(maturity) {
+      if (!Number.isFinite(maturity) || maturity <= 0) throw new Error("剩餘年期需大於 0。");
+      const count = Math.ceil((maturity - 1e-10) / 0.5);
+      const first = maturity - 0.5 * (count - 1);
+      return Array.from({length: count}, (_, i) => +(first + 0.5*i).toFixed(10));
+    }
+    function curveValues() {
+      return [...$("curveBody").querySelectorAll("tr")].map((tr,i) => ({
+        time: readNumber(tr.querySelector(".curve-time"),`第 ${i+1} 期付款時間`),
+        zero: readNumber(tr.querySelector(".curve-zero"),`第 ${i+1} 期零息利率`)
+      }));
+    }
+    function renderCurve(times, oldRows=[]) {
+      const old = oldRows.length ? oldRows : curveValues();
+      const matched = (t, i) => old.find(r => Math.abs(r.time-t) < 1e-7)?.zero ?? old[i]?.zero ?? (i+1);
+      $("curveBody").innerHTML = times.map((time,i) => `<tr>
+        <td>${String(i+1).padStart(2,"0")}</td>
+        <td><input class="curve-input curve-time" type="number" min="0.001" step="0.1" value="${time}" aria-label="第 ${i+1} 期付款時間"></td>
+        <td><input class="curve-input curve-zero" type="number" min="-100" max="100" step="0.001" value="${matched(time,i)}" aria-label="第 ${i+1} 期連續複利零息利率百分比"></td>
+        <td><span class="rate-ext">手動</span></td>
+      </tr>`).join("");
+      $("curveBody").querySelectorAll("input").forEach(input => input.addEventListener("input", () => { rateSource="手動輸入"; calculate(); }));
+    }
+    function calculate() {
+      try {
+        const fixedPct = readNumber($("fixedRate"),"IRS 固定利率");
+        const maturity = readNumber($("life"),"剩餘年期");
+        const principal = readNumber($("principal"),"名目本金");
+        const sofrPct = readNumber($("sofr"),"第一期 SOFR");
+        if (maturity <= 0 || principal <= 0) throw new Error("年期與名目本金需大於 0。");
+        const rows = curveValues();
+        if (!rows.length) throw new Error("請先建立付款日期與零息利率曲線。");
+        if (rows.some(r => !Number.isFinite(r.time) || !Number.isFinite(r.zero) || r.time<=0)) throw new Error("零息曲線需要完整填入有效的付款時間與利率。");
+        for (let i=1;i<rows.length;i++) if (rows[i].time <= rows[i-1].time) throw new Error("付款時間需由小到大排列，且不能重複。");
+        if (Math.abs(rows[rows.length-1].time-maturity)>1e-6) throw new Error("最後付款時間需等於剩餘年期；請按「更新付款日期」。");
+        const fixedRate = fixedPct/100;
+        const fixedCash = principal*fixedRate/2;
+        const result = rows.map((r,i) => {
+          const zero = r.zero/100;
+          const fwdCC = i===0 ? sofrPct/100 : (zero*r.time - (rows[i-1].zero/100)*rows[i-1].time)/(r.time-rows[i-1].time);
+          const fwdSC = 2*(Math.exp(fwdCC/2)-1);
+          const floatingCash = principal*fwdSC/2;
+          const net = floatingCash-fixedCash;
+          const df = Math.exp(-zero*r.time);
+          const pv = net*df;
+          return {time:r.time,zero,fixedCash,fwdCC,fwdSC,floatingCash,net,df,pv};
+        });
+        const total = result.reduce((s,r)=>s+r.pv,0);
+        latestRows = result;
+        $("resultBody").innerHTML = result.map((r,i)=>`<tr>
+          <td>${String(i+1).padStart(2,"0")}${i===0?'<span class="result-flag">SOFR</span>':''}</td><td>${fmt(r.time,3)}</td><td>${fmt(r.zero*100,3)}%</td><td>${fmt(r.fixedCash,6)}</td><td>${fmt(r.fwdCC*100,4)}%</td><td>${fmt(r.fwdSC*100,4)}%</td><td>${fmt(r.floatingCash,6)}</td><td>${fmt(r.net,6)}</td><td>${fmt(r.df,8)}</td><td>${fmt(r.pv,6)}</td>
+        </tr>`).join("");
+        $("valueSummary").textContent = fmt(total,6);
+        $("totalValue").textContent = fmt(total,6);
+        $("metricPeriods").textContent = String(rows.length).padStart(2,"0");
+        $("metricLastTime").textContent = `${fmt(rows[rows.length-1].time,2)} 年`;
+        $("metricSource").textContent = rateSource;
+        $("calcTimestamp").textContent = `最後計算：${new Date().toLocaleString("zh-TW",{hour12:false})}`;
+        setStatus("計算完成。可比對範例輸入：固定利率 3%、年期 1.2 年、本金 100、第一期 SOFR 2.5%、零息利率 1%／2%／3%。", "success");
+        safeSave();
+      } catch (error) {
+        $("resultBody").innerHTML = `<tr><td colspan="10" style="text-align:left;color:#9a4735;padding:18px 10px">${error.message}</td></tr>`;
+        $("valueSummary").textContent = "輸入待確認";
+        $("totalValue").textContent = "—";
+        $("metricSource").textContent = rateSource;
+        setStatus(error.message,"error");
+      }
+    }
+    function updateSchedule() {
+      try {
+        const old = curveValues();
+        const times = generatedTimes(Number($("life").value));
+        renderCurve(times, old);
+        rateSource="手動輸入";
+        calculate();
+      } catch (error) { setStatus(error.message,"error"); }
+    }
+    async function fetchSofr() {
+      const button=$("fetchBtn"); button.disabled=true; button.textContent="讀取中…";
+      setStatus("正在連線至紐約聯邦準備銀行 Markets Data API…","info");
+      try {
+        const endDate=new Date();
+        const startDate=new Date(endDate); startDate.setUTCDate(startDate.getUTCDate()-10);
+        const dateText=d=>d.toISOString().slice(0,10);
+        const url=`${NYFED_API}?startDate=${dateText(startDate)}&endDate=${dateText(endDate)}`;
+        const response=await fetch(url,{cache:"no-store",mode:"cors"});
+        if(!response.ok) throw new Error(`NYFed 回應 ${response.status}`);
+        const data=await response.json();
+        const observations=(data.refRates||[]).filter(row=>row.type==="SOFR"&&Number.isFinite(Number(row.percentRate))).map(row=>({date:row.effectiveDate,value:Number(row.percentRate)})).sort((a,b)=>a.date.localeCompare(b.date));
+        if(!observations.length) throw new Error("資料中沒有可用的 SOFR 觀測值。");
+        const latest=observations[observations.length-1];
+        $("sofr").value=latest.value.toFixed(3);
+        rateSource="NYFed SOFR";
+        calculate();
+        setStatus(`已讀取成功：SOFR ${latest.value.toFixed(3)}%（資料日期 ${latest.date}）。零息曲線保留手動輸入。來源：<a class="source-link" href="https://markets.newyorkfed.org/static/docs/markets-api.html" target="_blank" rel="noopener">紐約聯邦準備銀行 Markets Data API</a>。`,"success",true);
+        $("metricSource").textContent="NYFed SOFR";
+      } catch (error) {
+        setStatus(`外部讀取失敗：${error.message}。請檢查網路，或從 <a class="source-link" href="https://markets.newyorkfed.org/markets/reference-rates/sofr" target="_blank" rel="noopener">紐約聯邦準備銀行 SOFR 資料頁</a> 查詢最新利率後手動輸入 SOFR。`,"error",true);
+      } finally { button.disabled=false; button.textContent="讀取 NYFed 最新 SOFR"; }
+    }
+    function init() {
+      try {
+        const name=localStorage.getItem("irs-student-name"); const id=localStorage.getItem("irs-student-id");
+        if(name) $("studentName").value=name; if(id) $("studentId").value=id;
+      } catch (_) {}
+      $("studentName").addEventListener("input",safeSave); $("studentId").addEventListener("input",safeSave);
+      ["fixedRate","life","principal","sofr"].forEach(id=>$(id).addEventListener("input",()=>{if(id==="sofr")rateSource="手動輸入";calculate();}));
+      $("calculateBtn").addEventListener("click",calculate); $("scheduleBtn").addEventListener("click",updateSchedule); $("fetchBtn").addEventListener("click",fetchSofr);
+      renderCurve([0.2,0.7,1.2],[]); calculate();
+    }
+    init();
+  </script>
+</body>
+</html>
